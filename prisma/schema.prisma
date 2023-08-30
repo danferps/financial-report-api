@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Rule {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  type        String
+  markets     Market[]
+}
+
+model Market {
+  id      Int    @id @default(autoincrement())
+  name    String
+  columns String
+  page    Int
+  rule    Rule   @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  ruleId  Int
+}
