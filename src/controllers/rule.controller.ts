@@ -1,6 +1,5 @@
 import { Request, Response } from "express"
 import RuleService from "../services/rule.service"
-import { RuleModel } from "../models/rule.model"
 
 const {
   getAllRules,
@@ -21,7 +20,7 @@ export default class RuleController {
 
   static handleAddRule = async (req: Request, res: Response) => {
     try {
-      const rule: RuleModel = req.body
+      const rule = req.body
       const ruleCreated = await addNewRule(rule)
       res.status(201).json(ruleCreated)
     } catch (error) {
@@ -32,7 +31,7 @@ export default class RuleController {
 
   static handleUpdateRule = async (req: Request, res: Response) => {
     try {
-      const rule: RuleModel = req.body
+      const rule = req.body
       const ruleUpdated = await updateRule(rule)
       res.status(200).json(ruleUpdated)
     } catch (error) {

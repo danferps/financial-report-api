@@ -6,23 +6,50 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Country {
+  CO
+  AR
+  CR
+  MX
+}
+
+enum CompareType {
+  Value
+  Column
+  Formula
+}
+
+enum Category {
+  Text
+  Number
+  Date
+  Custom
+}
+
+model Validation {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  compareType    CompareType
+  category       Category
+  name           String
+  valueToCompare String
+  rule           Rule        @relation(fields: [ruleId], references: [id])
+  ruleId         String      @unique @db.ObjectId
+
+  @@map("validations")
 }
 
 model Rule {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
   description String
-  type        String
-  markets     Market[]
-}
+  columns     String[]
+  country     Country
+  validation  Validation?
+  message     String
 
-model Market {
-  id      Int    @id @default(autoincrement())
-  name    String
-  columns String
-  page    Int
-  rule    Rule   @relation(fields: [ruleId], references: [id], onDelete: Cascade)
-  ruleId  Int
+  @@map("rules")
 }
