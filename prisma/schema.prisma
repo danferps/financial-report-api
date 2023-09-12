@@ -36,7 +36,7 @@ model Validation {
   category       Category
   name           String
   valueToCompare String
-  rule           Rule        @relation(fields: [ruleId], references: [id])
+  rule           Rule        @relation(fields: [ruleId], references: [id], onDelete: Cascade)
   ruleId         String      @unique @db.ObjectId
 
   @@map("validations")
